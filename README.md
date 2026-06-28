@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chat App
+
+A chat application built with Vite + React (client) and Node.js (server), powered by the OpenAI API.
+
+## Features
+
+- **Vector store tool** — answers questions about Formity using a file search tool connected to an OpenAI vector store
+- **Weather tool** — fetches real-time weather for any city and renders a card component alongside the response
+- **Markdown formatting** — all responses are rendered as markdown
+- **Streaming** — responses stream in token by token using `fetch` + `ReadableStream`
+
+## Structure
+
+```
+apps/
+├── client/   # Vite + React + Tailwind
+└── server/   # Node.js + WebSocket server + OpenAI logic
+```
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Add your credentials to `apps/server/.env`:
+
+```
+OPENAI_API_KEY=...
+OPENAI_VECTOR_STORE_ID=...
+```
+
+Run both apps:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Client: `http://localhost:5173`
+- Server: `ws://localhost:3001`
