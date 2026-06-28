@@ -72,7 +72,12 @@ const weatherTool: OpenAI.Responses.Tool = {
 
 const tools: OpenAI.Responses.Tool[] = [
   ...(process.env.OPENAI_VECTOR_STORE_ID
-    ? [{ type: "file_search" as const, vector_store_ids: [process.env.OPENAI_VECTOR_STORE_ID] }]
+    ? [
+        {
+          type: "file_search" as const,
+          vector_store_ids: [process.env.OPENAI_VECTOR_STORE_ID],
+        },
+      ]
     : []),
   weatherTool,
 ];
@@ -123,8 +128,17 @@ async function handleWeatherCall(
   previousResponseId: string,
   emit: Emit,
 ): Promise<string> {
-  const weather = await getWeather(JSON.parse(toolCall.arguments));
-  emit({ type: "weather", data: weather });
+  let output: string;
+
+  try {
+    const weather = await getWeather(JSON.parse(toolCall.arguments));
+    emit({ type: "weather", data: weather });
+    output = JSON.stringify(weather);
+  } catch (err) {
+    output = JSON.stringify({
+      error: err instanceof Error ? err.message : "City not found",
+    });
+  }
 
   const followUp = await client.responses.create({
     model: "gpt-4o-mini",
@@ -133,7 +147,7 @@ async function handleWeatherCall(
       {
         type: "function_call_output",
         call_id: toolCall.call_id,
-        output: JSON.stringify(weather),
+        output,
       },
     ],
     tools,
